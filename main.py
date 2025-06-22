@@ -4,36 +4,36 @@ import sys
 import math
 
 # --- Constants ---
-WINDOW_WIDTH    = 1200
-WINDOW_HEIGHT   = 600
-FPS             = 60
-GROUND_HEIGHT   = 550
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 600
+FPS = 60
+GROUND_HEIGHT = 550
 
 # Colors
-COLOR_DAY        = (235, 235, 235)
-COLOR_NIGHT      = (50, 50, 50)
-COLOR_GROUND     = (83, 83, 83)
-COLOR_DINO       = (0, 0, 0)
-COLOR_HIGHLIGHT  = (255, 0, 0)
-COLOR_INPUT      = (0, 0, 0)
+COLOR_DAY = (235, 235, 235)
+COLOR_NIGHT = (50, 50, 50)
+COLOR_GROUND = (83, 83, 83)
+COLOR_DINO = (0, 0, 0)
+COLOR_HIGHLIGHT = (255, 0, 0)
+COLOR_INPUT = (0, 0, 0)
 COLOR_BG_OVERLAY = (200, 200, 200)
 
 # Dino settings
-DINO_WIDTH      = 60
-DINO_HEIGHT     = 60
-DINO_X          = 100
-GRAVITY         = 1.0
-JUMP_VELOCITY   = -20
+DINO_WIDTH = 60
+DINO_HEIGHT = 60
+DINO_X = 100
+GRAVITY = 1.0
+JUMP_VELOCITY = -20
 
 # Obstacle settings
-CACTUS_WIDTH    = 30
-CACTUS_HEIGHT   = 60
-PTERO_WIDTH     = 70
-PTERO_HEIGHT    = 60
+CACTUS_WIDTH = 30
+CACTUS_HEIGHT = 60
+PTERO_WIDTH = 70
+PTERO_HEIGHT = 60
 
 # Default obstacle speed and spawn interval
-OBSTACLE_SPEED  = 6
-SPAWN_INTERVAL  = 1500
+OBSTACLE_SPEED = 6
+SPAWN_INTERVAL = 1500
 
 
 def show_main_menu(screen, fonts, background):
@@ -51,7 +51,8 @@ def show_main_menu(screen, fonts, background):
         pygame.display.flip()
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit(); sys.exit()
+                pygame.quit();
+                sys.exit()
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_UP:
                     selected = (selected - 1) % len(options)
@@ -79,7 +80,8 @@ def show_instructions(screen, fonts, background):
         pygame.display.flip()
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit(); sys.exit()
+                pygame.quit();
+                sys.exit()
             if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 return
 
@@ -101,7 +103,8 @@ def show_difficulty_menu(screen, fonts, background):
         pygame.display.flip()
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit(); sys.exit()
+                pygame.quit();
+                sys.exit()
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_UP:
                     selected = (selected - 1) % len(options)
@@ -116,8 +119,12 @@ def show_difficulty_menu(screen, fonts, background):
 
 
 def show_character_menu(screen, fonts, background, characters):
-    thumb = 80; pad = 20; cols = 4
-    keys = list(characters.keys()); total = len(keys); selected = 0
+    thumb = 80;
+    pad = 20;
+    cols = 4
+    keys = list(characters.keys());
+    total = len(keys);
+    selected = 0
     thumbs = {k: pygame.transform.scale(characters[k], (thumb, thumb)) for k in keys}
     while True:
         screen.blit(background, (0, 0))
@@ -137,14 +144,21 @@ def show_character_menu(screen, fonts, background, characters):
         pygame.display.flip()
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit(); sys.exit()
+                pygame.quit();
+                sys.exit()
             if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_RIGHT: selected = (selected + 1) % total
-                elif e.key == pygame.K_LEFT: selected = (selected - 1) % total
-                elif e.key == pygame.K_DOWN: selected = (selected + cols) % total
-                elif e.key == pygame.K_UP: selected = (selected - cols) % total
-                elif e.key == pygame.K_RETURN: return keys[selected]
-                elif e.key == pygame.K_ESCAPE: return None
+                if e.key == pygame.K_RIGHT:
+                    selected = (selected + 1) % total
+                elif e.key == pygame.K_LEFT:
+                    selected = (selected - 1) % total
+                elif e.key == pygame.K_DOWN:
+                    selected = (selected + cols) % total
+                elif e.key == pygame.K_UP:
+                    selected = (selected - cols) % total
+                elif e.key == pygame.K_RETURN:
+                    return keys[selected]
+                elif e.key == pygame.K_ESCAPE:
+                    return None
 
 
 def show_math_minigame(screen, font_large, font_small, background, level):
@@ -162,7 +176,8 @@ def show_math_minigame(screen, font_large, font_small, background, level):
             return False
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit(); sys.exit()
+                pygame.quit();
+                sys.exit()
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_BACKSPACE:
                     user_input = user_input[:-1]
@@ -189,16 +204,19 @@ def show_math_minigame(screen, font_large, font_small, background, level):
         pygame.display.flip()
         pygame.time.delay(30)
 
+
 class Dino:
     def __init__(self):
         self.rect = pygame.Rect(DINO_X, GROUND_HEIGHT - DINO_HEIGHT, DINO_WIDTH, DINO_HEIGHT)
         self.image = dino_img
         self.velocity = 0
         self.is_jumping = False
+
     def jump(self):
         if not self.is_jumping:
             self.velocity = JUMP_VELOCITY
             self.is_jumping = True
+
     def update(self):
         self.velocity += GRAVITY
         self.rect.y += int(self.velocity)
@@ -206,8 +224,10 @@ class Dino:
             self.rect.y = GROUND_HEIGHT - DINO_HEIGHT
             self.is_jumping = False
             self.velocity = 0
+
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+
 
 class Obstacle:
     def __init__(self, kind, speed):
@@ -219,8 +239,10 @@ class Obstacle:
             y = GROUND_HEIGHT - DINO_HEIGHT - PTERO_HEIGHT - random.randint(20, 120)
             self.rect = pygame.Rect(WINDOW_WIDTH, y, PTERO_WIDTH, PTERO_HEIGHT)
             self.image = ptero_img
+
     def update(self):
         self.rect.x -= self.speed
+
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
@@ -239,7 +261,8 @@ def game_loop(screen, clock, font_small, font_pause, difficulty, base_speed, bas
         now = pygame.time.get_ticks()
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                pygame.quit(); sys.exit()
+                pygame.quit();
+                sys.exit()
             if e.type == pygame.KEYDOWN:
                 if e.key in (pygame.K_SPACE, pygame.K_UP) and not paused:
                     dino.jump()
@@ -283,8 +306,10 @@ def game_loop(screen, clock, font_small, font_pause, difficulty, base_speed, bas
                 thickness = 10
                 pygame.draw.rect(overlay, (255, 0, 0, int(alpha)), (0, 0, WINDOW_WIDTH, thickness))
                 pygame.draw.rect(overlay, (255, 0, 0, int(alpha)), (0, 0, thickness, WINDOW_HEIGHT))
-                pygame.draw.rect(overlay, (255, 0, 0, int(alpha)), (0, WINDOW_HEIGHT - thickness, WINDOW_WIDTH, thickness))
-                pygame.draw.rect(overlay, (255, 0, 0, int(alpha)), (WINDOW_WIDTH - thickness, 0, thickness, WINDOW_HEIGHT))
+                pygame.draw.rect(overlay, (255, 0, 0, int(alpha)),
+                                 (0, WINDOW_HEIGHT - thickness, WINDOW_WIDTH, thickness))
+                pygame.draw.rect(overlay, (255, 0, 0, int(alpha)),
+                                 (WINDOW_WIDTH - thickness, 0, thickness, WINDOW_HEIGHT))
                 screen.blit(background, (0, 0))
                 pygame.draw.line(screen, COLOR_GROUND, (0, GROUND_HEIGHT), (WINDOW_WIDTH, GROUND_HEIGHT), 4)
                 dino.draw(screen)
@@ -336,9 +361,11 @@ def main():
     while True:
         choice = show_main_menu(screen, (title_font, menu_font), background)
         if choice == 'Quit':
-            pygame.quit(); sys.exit()
+            pygame.quit();
+            sys.exit()
         elif choice == 'Start Game':
-            score = game_loop(screen, clock, font_small, font_pause, current_difficulty, base_speed, base_interval, background)
+            score = game_loop(screen, clock, font_small, font_pause, current_difficulty, base_speed, base_interval,
+                              background)
             while True:
                 screen.blit(background, (0, 0))
                 over_surf = title_font.render('Game Over!', True, COLOR_DINO)
@@ -371,6 +398,7 @@ def main():
             sel = show_character_menu(screen, (title_font, menu_font), background, characters)
             if sel is not None:
                 current_char, dino_img = sel, characters[sel]
+
 
 if __name__ == '__main__':
     main()
